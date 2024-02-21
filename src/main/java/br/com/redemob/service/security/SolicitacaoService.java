@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.redemob.enums.SituacaoEnum;
 import br.com.redemob.model.security.SegUsuario;
 import br.com.redemob.model.security.Solicitacao;
 import br.com.redemob.repository.security.SolicitacaoRepository;
@@ -35,5 +36,23 @@ public class SolicitacaoService {
 	public List<Solicitacao> listarSolicitacoes(SegUsuario user) {
 		return solicitacaoRepository.findBySegUsuario(user).get(); 
 	}
+	
+	public List<Solicitacao> listarSolicitacoesDeliberacao() {
+		return solicitacaoRepository.findAll(); 
+	}
+
+
+	public void aprovar(Long id) {
+		Solicitacao solicitacao = solicitacaoRepository.findById(id).get();
+		solicitacao.setSituacao(SituacaoEnum.APROVADO);
+		solicitacaoRepository.save(solicitacao);
+	}
+	
+	public void reprovar(Long id) {
+		Solicitacao solicitacao = solicitacaoRepository.findById(id).get();
+		solicitacao.setSituacao(SituacaoEnum.REPROVADO);
+		solicitacaoRepository.save(solicitacao);
+	}
+  
   
 }

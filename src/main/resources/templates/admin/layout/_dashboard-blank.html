@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -64,10 +63,6 @@
 </head>
 
 <body layout:fragment="hold-transition"	class="hold-transition skin-blue sidebar-mini">
-
-    <div id="spinner" class="modal">
-        <img th:src="@{/img/loading/ampulheta.gif}" />
-    </div>
 
 	<div class="wrapper">
 		<form th:object="${segUsuario}" method="GET">
@@ -162,7 +157,7 @@
 						</ul>
 					</li>
 
-					<li class="treeview" sec:authorize="hasRole('USER')"><a href="#"> <i class="fa fa-cogs"></i>
+					<li class="treeview"><a href="#"> <i class="fa fa-cogs"></i>
 						<span>Manutenção de cadastros</span> <span class="pull-right-container">
 							<i class="fa fa-angle-left pull-right"></i>
 						</span>
@@ -192,10 +187,19 @@
 						</span>
 					</a>
 						<ul class="treeview-menu">
-							<li class="treeview"><a href="#"><i	class="fa fa-cog"></i> Solicitações
+							<li class="treeview"><a href="#"><i	class="fa fa-cog"></i> Acompanhamento
 								<span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i></span></a>
 								<ul class="treeview-menu">
-									<li class="treeview"><a href="#"><i	class="fa fa-object-group"></i> Cartões
+									
+									<li class="treeview"><a href="#"><i	class="fa fa-object-group"></i> Deliberação
+										<span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+										<ul class="treeview-menu">
+											
+											<li><a th:href="@{/solicitacao/list-deliberacao}"><i class="fa fa-search"></i> Analisar</a></li>
+										</ul>
+									</li>
+									
+									<li class="treeview"><a href="#"><i	class="fa fa-object-group"></i> Solicitação
 										<span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
 										<ul class="treeview-menu">
 											<li><a th:href="@{/solicitacao/create-solicitacao}"><i class="fa fa-plus-circle"></i> Cadastrar</a></li>
@@ -205,7 +209,9 @@
 								</ul>
 							</li>
 							
-						</ul></li>
+						</ul>
+
+					</li>
 				</ul>
 			</section>
 			<!-- /.sidebar -->

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/_dashboard-blank}"
+      xmlns:data="http://www.thymeleaf.org/extras/data-attribute">
+
+<head>
+    <title>Listagem de Solicitação</title>
+</head>
+
+<th:block layout:fragment="content-wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Solicitação
+                <small>Listagem</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a th:href="@{/sistema}"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Listagem de Solicitações</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- Main row -->
+            <div class="row">
+                <!-- Left col -->
+                <section class="col-lg-12 connectedSortable">
+                    <div class="box">
+                        <!--
+                        <div class="box-header">
+                             <h3 class="box-title">Data Table With Full Features</h3>
+                         </div>
+                        -->
+                         <!-- /.box-header -->
+                        <div class="box-body">
+
+                            <div class="alert alert-success" th:if="${!#strings.isEmpty(successMessage)}">
+                                <span th:utext="${successMessage}"></span>
+                            </div>
+                            <br>
+                            <div class=" alert alert-danger" th:if="${#bools.isTrue(errorMessage)}">
+                                <div th:each="erro : ${errorMessage}">
+                                    <span th:utext="${erro}"></span>
+                                </div>
+                            </div>
+
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Versão</th>
+                                    <th>Foto</th>
+                                    <th>Criação</th>
+                                    <th>Última atualização</th>
+                                    <th>Situação</th>
+                                    <th>Ação</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="s : ${solicitacoes}">
+                                    <td th:text="${s.getId()}"></td>
+                                    <td th:text="${s.getVersion()}"></td>
+                                    <td th:text="${s.getFoto()}"></td>
+                                    <td th:text="${#dates.format(s.getDateCreated(), 'dd/MM/yyyy - HH:mm:ss')}"></td>
+                                    <td th:text="${#dates.format(s.getLastUpdated(), 'dd/MM/yyyy - HH:mm:ss')}"></td>
+                                    <td th:text="${s.getSituacaoDescricao()}"></td>
+                                    <td class="text-center" >
+										<a th:href="@{/solicitacao/approve/{id}(id=${s.id})}">
+			                                <i class="fa fa-check"> | </i>
+			                            </a>
+										
+									    <a th:href="@{/solicitacao/disapprove/{id}(id=${s.id})}">
+			                                <i class="fa fa-close"></i>
+			                            </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </section>
+                <!-- /.Left col -->
+            </div>
+            <!-- /.row (main row) -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+
+</th:block>
+
+</html>

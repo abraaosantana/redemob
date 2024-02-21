@@ -116,5 +116,12 @@ public class SegUsuario implements Serializable {
 	public SegUsuario() {
 	}
 
+	public boolean isUser() {
+		return segGrupos.stream().map(g -> g.getName()).anyMatch(u -> u.equals("USER"));
+	}
+	
+	public boolean isAdmin() {
+		return segGrupos.stream().map(g -> g.getName()).anyMatch(u -> u.equals("ADMIN"));
+	}
 	
 }
