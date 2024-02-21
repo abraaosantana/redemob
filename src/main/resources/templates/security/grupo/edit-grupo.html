@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/_dashboard-blank}">
+
+<head>
+	<title>Edição de Grupo</title>
+</head>
+
+<th:block layout:fragment="content-wrapper">
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				Grupo
+				<small>Edição</small>
+			</h1>
+			<ol class="breadcrumb">
+				<li><a th:href="@{/sistema}"><i class="fa fa-dashboard"></i> Home</a></li>
+				<li class="active">Edição grupo</li>
+			</ol>
+		</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div layout:fragment="content">
+			<div class="box box-primary">
+
+				<div class="box-body">
+
+					<div class="alert alert-success" th:if="${!#strings.isEmpty(successMessage)}">
+						<span th:utext="${successMessage}"></span>
+					</div>
+					<br>
+					<div class=" alert alert-danger" th:if="${#bools.isTrue(errorMessage)}">
+						<div th:each="erro : ${errorMessage}">
+							<span th:utext="${erro}"></span>
+						</div>
+					</div>
+				
+                <form th:action="@{/grupo/edit-grupo}" th:object="${grupo}" method="POST">
+
+						<h5><strong>Informações Gerais</strong></h5><hr>
+						
+						<div class="row">
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="inputId" class="control-label">id</label>
+										<input type="text" id="inputId" th:field="*{id}" class="form-control" readonly="readonly">
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="inputVersao" class="control-label">Versão</label>
+									<input type="text" id="inputVersao" th:field="*{version}" class="form-control" readonly="readonly">
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputDataCriacao" class="control-label">Data de Criação</label>
+									<!-- Exemplo: value="2019-06-12T19:30-->
+										<input id="inputDataCriacao"
+											   th:type="datetime-local"
+											   th:value="${#dates.format(grupo.getDateCreated(), 'yyyy-MM-dd') + 'T' + #dates.format(grupo.getDateCreated(), 'HH:mm') }"
+											   name="inputDataCriacao"
+											   class="form-control"
+											   readonly="readonly">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputUltimaAtualizacao" class="control-label">Data última alteração</label>
+									<input id="inputUltimaAtualizacao"
+										   th:type="datetime-local"
+										   th:value="${#dates.format(grupo.getLastUpdated(), 'yyyy-MM-dd') + 'T' + #dates.format(grupo.getLastUpdated(), 'HH:mm') }"
+										   name="inputUltimaAtualizacao"
+										   class="form-control"
+										   readonly="readonly">
+								</div>
+							</div>
+						</div>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="inputNome" class="control-label">Grupo</label>
+								<input type="text" id="inputNome" th:field="*{name}" class="form-control">
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="inputStatus" class="control-label">Status</label>
+								<select id="inputStatus" th:field="*{active}" class="form-control select2">
+									<option th:each="status: ${statusList}"
+											th:value="${status}"
+											th:text="#{|StatusEnum.${status}|}">
+									</option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+
+					<!--
+
+						<div class="row">
+							
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputMunicipio" class="control-label">Município</label>
+									<select id="inputMunicipio" th:field="*{segPermissa}" class="form-control select2" >
+										<option th:each="municipio: ${listaMunicipios}" 
+										        th:value="${municipio.id}" 
+										        th:text="${municipio.nome}" >
+										</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="inputCnpj" class="control-label">CNPJ</label>
+										<input type="text" id="inputCnpj" th:field="*{cnpj}" class="form-control">
+									<label th:if="${#fields.hasErrors('cnpj')}" th:errors="*{cnpj}" class="text-danger"></label>
+								</div>
+							</div>
+							<div class="col-md-2">
+							<div class="form-group">
+								<label for="inputStatus" class="control-label">Status</label> 
+								<select id="inputStatus" th:field="*{admStatus}" class="form-control select2">
+									<option th:each="status: ${listaStatus}"
+										    th:value="${status.id}"
+										    th:text="${status.descricao}">
+								    </option>
+								</select>
+							</div>
+						</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputNaturezaJuridica" class="control-label">Natureza Jurídica</label> 
+									<select id="inputNaturezaJuridica" th:field="*{admNaturezaJuridica}" class="form-control select2">
+										<option th:each="naturezaJuridica: ${listaNaturezasJuridicas}"
+											    th:value="${naturezaJuridica.id}"
+											    th:text="${naturezaJuridica.descricao}">
+									    </option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="inputNomeExibicao" class="control-label">Nome do Órgão </label> 
+										<input type="text" id="inputNomeExibicao" th:field="*{nomeExibicao}" class="form-control"  
+										       placeholder="Ex: FUNDO MUNICIPAL DE SAÚDE">
+									<label th:if="${#fields.hasErrors('nomeExibicao')}" th:errors="*{nomeExibicao}" class="text-danger"></label>
+								</div>
+							</div>
+							<div class="col-md-2">
+							<div class="form-group">
+								<label for="inputOperacao" class="control-label">Tipo de operação</label> 
+								<select id="inputOperacao" th:field="*{operacao}" class="form-control select2">
+									<option th:each="operacao: ${listaOperacoes}"
+										    th:value="${operacao}"
+										    th:text="#{|admOperacoesEnum.${operacao}|}">
+								    </option>
+								</select>
+							</div>
+							</div>							
+						</div>
+						
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputNomeCnpj" class="control-label">Nome Cnpj</label>
+										<input type="text" id="inputNomeCnpj" th:field="*{nomeCnpj}" class="form-control" readonly="readonly">
+								</div>
+							</div>
+						</div>
+						
+						<h5><strong>Informações de Endereço</strong></h5><hr>
+						
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputLogradouro" class="control-label">Logradouro</label>
+										<input type="text" id="inputLogradouro" th:field="*{endereco}" class="form-control"/>
+									<label th:if="${#fields.hasErrors('endereco')}" th:errors="*{endereco}" class="text-danger"></label>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputCep" class="control-label">CEP</label>
+										<input type="text" id="inputCep" th:field="*{cep}" class="form-control"/>
+									<label th:if="${#fields.hasErrors('cep')}" th:errors="*{cep}" class="text-danger"></label>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputBairro" class="control-label">Bairro</label>
+										<input type="text" id="inputBairro" th:field="*{bairro}" class="form-control"/>
+									<label th:if="${#fields.hasErrors('bairro')}" th:errors="*{bairro}" class="text-danger"></label>
+								</div>
+							</div>
+						</div>
+						
+						<h5><strong>Informações de Contato</strong></h5><hr>
+						
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputEmail" class="control-label">E-mail</label> 
+										<input type="text" id="inputEmail" th:field="*{email}"	class="form-control" />
+									<label th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></label>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputTelefoneCel" class="control-label">Telefone Celular</label>
+										<input type="text" id="inputTelefoneCel" th:field="*{telefoneCel}" class="form-control"/>
+									<label th:if="${#fields.hasErrors('telefoneCel')}" th:errors="*{telefoneCel}" class="text-danger"></label>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputTelefone" class="control-label">Telefone Fixo</label>
+										<input type="text" id="inputTelefone" th:field="*{telefone}" class="form-control"/>
+									<label th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}" class="text-danger"></label>
+								</div>
+							</div>
+						</div>
+						<div class="row">					
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="inputEmailOpc" class="control-label">E-mail Secundário</label> 
+										<input type="text" id="inputEmailOpc"	th:field="*{emailOpcional}" class="form-control"/>
+									<label th:if="${#fields.hasErrors('emailOpcional')}" th:errors="*{emailOpcional}" class="text-danger"></label>
+								</div>
+							</div>
+						</div>
+
+						-->
+
+						<div>
+							<button type="submit" class="btn btn-danger">Editar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+		<!-- /.content -->
+	</div>
+
+</th:block>
+
+</html>

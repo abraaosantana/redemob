@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/_dashboard-blank}">
+
+<head>
+	<title>Cadastro de Grupo</title>
+</head>
+
+<th:block layout:fragment="content-wrapper">
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				Grupo
+				<small>Cadastro</small>
+			</h1>
+			<ol class="breadcrumb">
+				<li><a th:href="@{/sistema}"><i class="fa fa-dashboard"></i> Home</a></li>
+				<li class="active">Cadastro grupo</li>
+			</ol>
+		</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div layout:fragment="content">
+			<div class="box box-primary">
+
+				<div class="box-body">
+
+					<div class="alert alert-success" th:if="${!#strings.isEmpty(successMessage)}">
+						<span th:utext="${successMessage}"></span>
+					</div>
+					<br>
+					<div class=" alert alert-danger" th:if="${#bools.isTrue(errorMessage)}">
+						<div th:each="erro : ${errorMessage}">
+							<span th:utext="${erro}"></span>
+						</div>
+					</div>
+
+                <form th:action="@{/grupo/create-grupo}" th:object="${grupo}" method="POST">
+						
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="inputGrupo" class="control-label">Nome do Grupo</label>
+									<input type="text" id="inputGrupo" th:field="*{name}" class="form-control" placeholder="USER">
+									<label th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></label>
+								</div>
+							</div>
+						</div>
+
+						<div>
+							<button type="submit" class="btn btn-danger">Salvar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- /.content -->
+	</div>
+
+</th:block>
+
+</html>

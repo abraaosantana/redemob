@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="~{account/layout/_account}">
+
+<th:block layout:fragment="page">
+	<body class="hold-transition login-page">
+		<th:block layout:fragment="page-box">
+			<div class="login-box">
+				
+				<div class="login-logo">
+					<a th:href="@{/}">
+						<img alt="Redemob Consórcio" width="220" height="82" data-sticky-width="120" data-sticky-height="45" data-sticky-top="40" src="img/logo.png">
+					</a>
+				</div>
+				
+				<!-- /.login-logo -->
+				<div class="login-box-body">
+					<p class="login-box-msg">Faça login para iniciar sua sessão</p>
+
+					<div class="alert-success">
+						<span th:utext="${successMessage}"></span>
+					</div>
+
+					<div class="alert-danger"
+						th:if="${#bools.isTrue(param.error)}">
+						<strong>O usuário ou senha não conferem!</strong>
+						<span th:utext="${errorMessage}"></span>
+					</div> 
+					
+					<br>
+					
+					<form th:object="${user}" th:action="@{/login}" method="POST">
+						<div class="form-group has-feedback">
+							<input id="user" type="email" name="email" class="form-control"
+								placeholder="Email" autofocus="autofocus" required="required">
+							<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+						</div>
+						<div class="form-group has-feedback">
+							<input id="password" type="password" name="password"
+								class="form-control" placeholder="Senha" data-type="password"
+								required="required"> <span
+								class="glyphicon glyphicon-lock form-control-feedback"></span>
+						</div>
+						<div class="row">					
+							<!-- /.col -->
+							<div class="col-xs-5 .col-sm-6">
+								<button type="submit" class="btn btn-primary btn-block btn-flat">Entrar</button>
+							</div>
+							<!-- /.col -->
+						</div>
+					</form>
+
+					<a th:href="@{/reset}">Esqueceu a senha?</a><br> <a
+						th:href="@{/registro}" class="text-center">Não possui
+						cadastro? Registre-se</a>
+
+				</div>
+				<!-- /.login-box-body -->
+			</div>
+		</th:block>
+	</body>
+</th:block>
+</html>

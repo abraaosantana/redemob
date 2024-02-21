@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt" 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="~{account/layout/_account}">
+
+<th:block layout:fragment="page">
+	<body class="hold-transition register-page">
+		<th:block layout:fragment="page-box">
+			<div class="register-box">
+				<div class="register-logo">
+					<a th:href="@{/}">
+						<img alt="Redemob Consórcio" width="220" height="82" data-sticky-width="120" data-sticky-height="45" data-sticky-top="40" src="img/logo.png">
+					</a>
+				</div>
+
+				<div class="register-box-body">
+					<p class="login-box-msg">Informe seu e-mail e enviaremos uma senha padrão.</p>
+					<strong><p class="login-box-msg">Altere sua senha em perfil de Usuário</p></strong>
+					
+					<div class="alert-danger"
+						th:if="${#bools.isTrue(errorValidate)}">
+						<strong th:utext="${errorValidate}"></strong>
+					</div><br>
+					
+					<form th:object="${user}" th:action="@{/reset}" method="post">
+			
+						<div class="form-group has-feedback">
+							
+							<input type="text" class="form-control" th:field="*{email}" placeholder="E-mail" /> 
+							<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+							<label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></label>
+						</div>
+						
+						<div class="row">
+							<div class="col-xs-6">
+								
+							</div>
+							<div class="col-xs-6">
+								<button type="submit" class="btn btn-primary btn-block btn-flat">Enviar</button>
+							</div>
+							
+						</div>
+					</form>
+
+					<br> 
+					<a th:href="@{/login}" class="text-center">Lembrei minha senha!</a><br> 
+					<a th:href="@{/registro}" class="text-center">Não possui cadastro? Registre-se</a>
+					
+				</div>
+				<!-- /.form-box -->
+			</div>
+			<!-- /.register-box -->
+		</th:block>
+	</body>
+</th:block>
+</html>

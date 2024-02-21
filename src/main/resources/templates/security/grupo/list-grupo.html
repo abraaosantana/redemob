@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/_dashboard-blank}"
+      xmlns:data="http://www.thymeleaf.org/extras/data-attribute">
+
+<head>
+    <title>Listagem de Grupo</title>
+</head>
+
+<th:block layout:fragment="content-wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Grupo
+                <small>Listagem</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a th:href="@{/sistema}"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Listagem grupo</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <h3>150</h3>
+
+                            <p>New Orders</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3>53<sup style="font-size: 20px">%</sup></h3>
+
+                            <p>Bounce Rate</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3>44</h3>
+
+                            <p>User Registrations</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person-add"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-red">
+                        <div class="inner">
+                            <h3>65</h3>
+
+                            <p>Unique Visitors</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-pie-graph"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+            </div>
+            <!-- /.row -->
+            <!-- Main row -->
+            <div class="row">
+                <!-- Left col -->
+                <section class="col-lg-12 connectedSortable">
+                    <div class="box">
+                        <!--
+                        <div class="box-header">
+                             <h3 class="box-title">Data Table With Full Features</h3>
+                         </div>
+                        -->
+                         <!-- /.box-header -->
+                        <div class="box-body">
+
+                            <div class="alert alert-success" th:if="${!#strings.isEmpty(successMessage)}">
+                                <span th:utext="${successMessage}"></span>
+                            </div>
+                            <br>
+                            <div class=" alert alert-danger" th:if="${#bools.isTrue(errorMessage)}">
+                                <div th:each="erro : ${errorMessage}">
+                                    <span th:utext="${erro}"></span>
+                                </div>
+                            </div>
+
+                            <a th:href="@{/grupo/create-grupo}" class="btn btn-app">
+                                <i class="fa fa-plus"></i> Criar Grupo
+                            </a>
+
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Versão</th>
+                                    <th>Grupo</th>
+                                    <th>Criação</th>
+                                    <th>Última atualização</th>
+                                    <th>Ações</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="g : ${grupos}">
+                                    <td th:text="${g.getId()}"></td>
+                                    <td th:text="${g.getVersion()}"></td>
+                                    <td th:text="${g.getName()}"></td>
+                                    <td th:text="${#dates.format(g.getDateCreated(), 'dd/MM/yyyy - HH:mm:ss')}"></td>
+                                    <td th:text="${#dates.format(g.getLastUpdated(), 'dd/MM/yyyy - HH:mm:ss')}"></td>
+                                    <td class="text-center" >
+                                        <i class="fa fa-pencil" style="cursor:pointer"
+                                           data-toggle="modal" data-target="#confirmaEdicaoModal"
+                                           data:nome="${g.name}"
+                                           data:url-editar="@{/grupo/edit-grupo/{id}(id=${g.id})}"> | </i>
+
+                                        <i class="fa fa-trash" style="cursor:pointer"
+                                           data-toggle="modal" data-target="#confirmaExclusaoModal"
+                                           data:nome="${g.name}"
+                                           data:url-apagar="@{/grupo/delete-grupo/{id}(id=${g.id})}">  </i>
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="modal fade" id="confirmaEdicaoModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <form th:action="@{/grupo}" method="POST">
+                                        <input type="hidden" name="_method" value="PUT"/>
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <h4 class="modal-title" id="modalLabelEditar">Editar </h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <span>Não é recomendado editar o Grupo! Tem certeza?</span>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn  btn-default" data-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn  btn-primary">Editar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.modal-edit-body -->
+
+                        <div class="modal fade" id="confirmaExclusaoModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <form th:action="@{/grupo}" method="POST">
+                                        <input type="hidden" name="_method" value="DELETE"/>
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <h4 class="modal-title" id="modalLabelExcluir">Excluir </h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <span>Não é recomendado excluir o Grupo! Tem certeza?</span>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn  btn-default" data-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn  btn-primary">Excluir</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.modal-delete-body -->
+
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                </section>
+                <!-- /.Left col -->
+            </div>
+            <!-- /.row (main row) -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+
+</th:block>
+
+</html>

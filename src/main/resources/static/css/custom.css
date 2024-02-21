@@ -1,0 +1,165 @@
+/* Add here all your CSS customizations */
+.visuallyhidden { 
+    position: absolute; 
+    overflow: hidden; 
+    clip: rect(0 0 0 0); 
+    height: 1px; width: 1px; 
+    margin: -1px; padding: 0; border: 0; 
+}
+.header-body {
+    position: relative;
+}
+h1.logo {
+    font-family: 'Merienda', cursive;
+    font-size: 25px;
+    position: absolute;
+    left: 0;
+    top: 10px;  
+    width: 420px;
+}
+h1.logo a { 
+    display: block; 
+    overflow: auto;
+}
+h1.logo span {
+    display: block;
+    float: right;
+    line-height: 1.5;
+    margin-right: 100px;
+    margin-top: 15px;
+    text-align: center;
+    width: 220px;
+}
+h1.logo a:hover {
+    text-decoration: none;
+}
+.main{
+    margin-bottom: 30px;
+}
+.features h4 {
+    /*color: #007BFF;*/
+    color: #333;
+}
+.features article h6 {
+    font-weight: bold;
+    color: #435656;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+.blogs .col {
+    margin-bottom: 25px;
+}
+.blogs h3 {
+    width: 100%;
+}
+.image-logo {
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+}
+
+.services {
+    background-color: #E3F6FC;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.services h4, .services h6 {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    text-transform: uppercase;
+    text-align: center;
+    color: #05779A;
+}
+
+.services .service-icon {
+    margin-top: 10px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.services .service-icon i {
+    color: #3399cc;
+    font-size: 70px;
+}
+
+.mask-cpf {
+	position: absolute;    
+}
+
+.mask-cnpj {
+	position: absolute;    
+}
+
+.mask-cep {
+	position: absolute;    
+}
+
+.mask-telefone {
+	position: absolute;    
+}
+
+.mask-celular {
+	position: absolute;    
+}
+
+@media screen 
+  and (min-width: 768px) 
+  and (max-width: 1024px)  
+  and (orientation: landscape) {    
+    h1.logo span {
+        font-size: 20px;
+        margin-right: 140px;
+        width: 180px;
+    } 
+}
+
+@media screen 
+  and (min-width: 768px) 
+  and (max-width: 1024px)  
+  and (orientation: portrait) {     
+    h1.logo span {
+        font-size: 18px;        
+        margin-right: 175px;
+        margin-top: 40px;
+        width: 140px;
+    } 
+}
+
+@media screen 
+  and (min-width: 600px) 
+  and (max-width: 800px)  {     
+    h1.logo span {
+        font-size: 18px;        
+        margin-right: 175px;
+        margin-top: 40px;
+        width: 140px;
+    } 
+}
+
+@media screen 
+  and (min-width: 320px) 
+  and (max-width: 568px)  
+  and (orientation: portrait) {     
+    h1.logo span {
+        display: none;
+    } 
+    .image-logo {
+        margin-left: 10px;
+    }
+}
+
+@media screen 
+  and (min-width: 320px) 
+  and (max-width: 568px)  
+  and (orientation: landscape) {     
+    h1.logo span {
+        margin-right: 90px;
+    } 
+    .image-logo {
+        margin-left: 10px;
+    }
+}
