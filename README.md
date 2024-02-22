@@ -15,7 +15,6 @@
 5) Acessar o sistema com usuário cadastrado realizar a solicitação anexando os arquivos.
 6) É possivel aprovar a solicitação no menu "Elegibilidade/Acompanhamento/Deliberação/Analisar".
 
-OBS: Controle de autorização do spring não foi implementado logo os menus estão aparecendo para ambos usuários.
 
 
 

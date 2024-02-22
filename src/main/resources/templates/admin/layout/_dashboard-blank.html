@@ -156,8 +156,8 @@
 									class="fa fa-circle-o"></i> Visão Geral</a></li>
 						</ul>
 					</li>
-<!--
-					<li class="treeview"><a href="#"> <i class="fa fa-cogs"></i>
+
+					<li sec:authorize="hasAuthority('MASTER')" class="treeview"><a href="#"> <i class="fa fa-cogs"></i>
 						<span>Manutenção de cadastros</span> <span class="pull-right-container">
 							<i class="fa fa-angle-left pull-right"></i>
 						</span>
@@ -177,7 +177,7 @@
 							</li>
 						
 						</ul></li>
--->						
+					
 
 					<li class="treeview"><a href="#"> <i class="fa fa-cogs"></i>
 						<span>Elegibilidade</span> <span class="pull-right-container">
@@ -189,15 +189,14 @@
 								<span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i></span></a>
 								<ul class="treeview-menu">
 									
-									<li class="treeview"><a href="#"><i	class="fa fa-object-group"></i> Deliberação
+									<li sec:authorize="hasAuthority('ADMIN')" class="treeview"><a href="#"><i	class="fa fa-object-group"></i> Deliberação
 										<span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
 										<ul class="treeview-menu">
-											
 											<li><a th:href="@{/solicitacao/list-deliberacao}"><i class="fa fa-search"></i> Analisar</a></li>
 										</ul>
 									</li>
 									
-									<li class="treeview"><a href="#"><i	class="fa fa-object-group"></i> Solicitação
+									<li sec:authorize="hasAuthority('USER')" class="treeview"><a href="#"><i	class="fa fa-object-group"></i> Solicitação
 										<span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
 										<ul class="treeview-menu">
 											<li><a th:href="@{/solicitacao/create-solicitacao}"><i class="fa fa-plus-circle"></i> Cadastrar</a></li>
@@ -215,8 +214,10 @@
 			<!-- /.sidebar -->
 		</aside>
 
-		<div layout:fragment="content-wrapper" class="content-wrapper"></div>
-
+		<div layout:fragment="content-wrapper" class="content-wrapper">
+						
+		</div>
+		
 		<!-- /.content-wrapper -->
 		<footer class="main-footer">
 			<div class="pull-right hidden-xs">
