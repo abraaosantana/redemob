@@ -51,12 +51,13 @@
 
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
-                                <tr>
+                                                                <tr>
                                     <th>Id</th>
-                                    <th>Versão</th>
-                                    <th>Foto</th>
                                     <th>Criação</th>
                                     <th>Última atualização</th>
+                                    <th>Doc. Biometria</th>
+                                    <th>Doc. Identidade</th>
+                                    <th>Doc. Residência</th>
                                     <th>Situação</th>
                                     <th>Ação</th>
                                 </tr>
@@ -64,11 +65,13 @@
                                 <tbody>
                                 <tr th:each="s : ${solicitacoes}">
                                     <td th:text="${s.getId()}"></td>
-                                    <td th:text="${s.getVersion()}"></td>
-                                    <td th:text="${s.getFoto()}"></td>
                                     <td th:text="${#dates.format(s.getDateCreated(), 'dd/MM/yyyy - HH:mm:ss')}"></td>
                                     <td th:text="${#dates.format(s.getLastUpdated(), 'dd/MM/yyyy - HH:mm:ss')}"></td>
+                                    <td><a th:href="@{'/solicitacao/downloadfile?id=' + ${s.getId()} + '&type=biometria'}"><i class="fa fa-download"></i></a></td>
+                                    <td><a th:href="@{'/solicitacao/downloadfile?id=' + ${s.getId()} + '&type=identidade'}"><i class="fa fa-download"></i></a></td>
+                                    <td><a th:href="@{'/solicitacao/downloadfile?id=' + ${s.getId()} + '&type=residencia'}"><i class="fa fa-download"></i></a></td>
                                     <td th:text="${s.getSituacaoDescricao()}"></td>
+                                
                                     <td class="text-center" >
 										<a th:href="@{/solicitacao/approve/{id}(id=${s.id})}">
 			                                <i class="fa fa-check"> | </i>

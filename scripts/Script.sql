@@ -90,6 +90,20 @@ create table rocket.seg_usuario_profile
 	primary key (id)
 );
 
+create table rocket.solicitacao 
+	(id int8 not null, 
+	active boolean not null, 
+	date_created timestamp, 
+	doc_biometria bytea not null, 
+	doc_comprovante_residencia bytea not null, 
+	doc_identidade bytea not null, 
+	last_updated timestamp, 
+	situacao int4, 
+	version int8 not null, 
+	usuario_id int8, 
+	primary key (id)
+);
+
 alter table if exists rocket.seg_grupo add constraint UK_SEG_GRUPO_NAME unique (name);
 
 alter table if exists rocket.seg_usuario add constraint UK_SEG_USUARIO_EMAIL unique (email);
@@ -102,6 +116,8 @@ create sequence rocket.seg_usuario_profile_seq start 1 increment 1;
 
 create sequence rocket.seg_usuario_seq start 1 increment 1;
 
+create sequence rocket.solicitacao_seq start 1 increment 1;
+
 alter table if exists rocket.seg_usuario_grupo add constraint FK_SEG_USUARIO_GRUPO_ID foreign key (grupo_id) references rocket.seg_grupo;
 
 alter table if exists rocket.seg_usuario_grupo add constraint FK_SEG_USUARIO_USUARIO_ID foreign key (usuario_id) references rocket.seg_usuario;
@@ -109,6 +125,8 @@ alter table if exists rocket.seg_usuario_grupo add constraint FK_SEG_USUARIO_USU
 alter table if exists rocket.seg_usuario_profile add constraint FK_SEG_USUARIO_PROFILE_ENDERECO_ID foreign key (usuario_endereco_id) references rocket.aux_endereco;
 
 alter table if exists rocket.seg_usuario_profile add constraint FK_SEG_USUARIO_PROFILE_USUARIO_ID foreign key (usuario_id) references rocket.seg_usuario;
+
+alter table if exists rocket.solicitacao add constraint FK_SOLICITACAO_USUARIO_ID foreign key (usuario_id) references rocket.seg_usuario;
 
 -- INSERTS
 INSERT INTO rocket.seg_grupo(id, active, date_created, last_updated, name, version) 

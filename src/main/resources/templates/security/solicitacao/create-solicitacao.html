@@ -41,14 +41,28 @@
 						</div>
 					</div>
 
-                <form th:action="@{/solicitacao/create-solicitacao}" th:object="${solicitacao}" method="POST">
+                <form th:action="@{/solicitacao/create-solicitacao}" th:object="${solicitacao}" method="POST" enctype="multipart/form-data">
 						
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<label for="inputFoto" class="control-label">Foto</label>
-									<input type="text" id="inputFoto" th:field="*{foto}" class="form-control">
-									<label th:if="${#fields.hasErrors('foto')}" th:errors="*{foto}" class="text-danger"></label>
+									<label for="inputBiometria" class="control-label">Documento Biometria</label>
+									<input id="inputBiometria" type="file" name="biometria">
+									
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="inputIdentidade" class="control-label">Documento de Identidade</label>
+									<input id="inputIdentidade" type="file" name="identidade">
+									
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="inputResidencia" class="control-label">Comprovante de Residência</label>
+									<input id="inputResidencia" type="file" name="residencia">
+									
 								</div>
 							</div>
 						</div>

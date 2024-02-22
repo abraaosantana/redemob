@@ -12,7 +12,7 @@ import com.google.gson.GsonBuilder;
 
 import br.com.redemob.exception.ViaCepException;
 import br.com.redemob.infra.ViaCepClient;
-import br.com.redemob.service.Infra.dto.AddressDto;
+import br.com.redemob.service.dto.AddressDto;
 
 @Service
 public class ViaCepService {

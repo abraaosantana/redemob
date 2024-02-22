@@ -1,5 +1,6 @@
 package br.com.redemob.service.security;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import br.com.redemob.enums.SituacaoEnum;
 import br.com.redemob.model.security.SegUsuario;
 import br.com.redemob.model.security.Solicitacao;
 import br.com.redemob.repository.security.SolicitacaoRepository;
+import br.com.redemob.service.dto.FilesDto;
 
 @Service
 public class SolicitacaoService {
@@ -21,20 +23,22 @@ public class SolicitacaoService {
     SegUsuarioService userService;
 
 
-    public void saveSolicitacao(Solicitacao solicitacao, SegUsuario user) {
+    public void saveSolicitacao(Solicitacao solicitacao, SegUsuario user, FilesDto files) throws IOException {
         Date dataAtual = new Date();
         solicitacao.setDateCreated(dataAtual);
         solicitacao.setLastUpdated(dataAtual);
         solicitacao.setActive(true);
         solicitacao.setSegUsuario(user);
         if (solicitacao.getVersion() > 0) solicitacao.setVersion(solicitacao.getVersion() + 1);
-        solicitacao.setFoto(solicitacao.getFoto().toUpperCase());
+        solicitacao.setDocBiometria(files.getBiometria().getBytes());
+        solicitacao.setDocIdentidade(files.getIdentidade().getBytes());
+        solicitacao.setDocComprovanteResidencia(files.getResidencia().getBytes());
         solicitacaoRepository.save(solicitacao);
     }
 
 
 	public List<Solicitacao> listarSolicitacoes(SegUsuario user) {
-		return solicitacaoRepository.findBySegUsuario(user).get(); 
+		return solicitacaoRepository.findBySegUsuario(user).get();
 	}
 	
 	public List<Solicitacao> listarSolicitacoesDeliberacao() {
@@ -52,6 +56,11 @@ public class SolicitacaoService {
 		Solicitacao solicitacao = solicitacaoRepository.findById(id).get();
 		solicitacao.setSituacao(SituacaoEnum.REPROVADO);
 		solicitacaoRepository.save(solicitacao);
+	}
+
+
+	public Solicitacao findById(Long id) {
+		return solicitacaoRepository.findById(id).get();
 	}
   
   

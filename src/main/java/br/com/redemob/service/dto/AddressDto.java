@@ -1,4 +1,4 @@
-package br.com.redemob.service.Infra.dto;
+package br.com.redemob.service.dto;
 
 import com.google.gson.annotations.SerializedName;
 

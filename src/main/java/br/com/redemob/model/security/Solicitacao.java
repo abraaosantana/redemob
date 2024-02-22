@@ -11,13 +11,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.Type;
 
 import br.com.redemob.enums.SituacaoEnum;
 import lombok.EqualsAndHashCode;
@@ -49,8 +52,20 @@ public class Solicitacao implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
 	private Date lastUpdated;
 
-    @NotBlank(message = "*Não pode estar em branco!")
-    private String foto;
+    @Lob
+    @Type(type = "org.hibernate.type.ImageType")
+    @NotNull
+    private byte[] docBiometria;
+    
+    @Lob
+    @Type(type = "org.hibernate.type.ImageType")
+    @NotNull
+    private byte[] docIdentidade;
+    
+    @Lob
+    @Type(type = "org.hibernate.type.ImageType")
+    @NotNull
+    private byte[] docComprovanteResidencia;
     
     private SituacaoEnum situacao = SituacaoEnum.ANALISE;
     
