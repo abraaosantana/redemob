@@ -54,7 +54,8 @@
                                                                 <tr>
                                     <th>Id</th>
                                     <th>Criação</th>
-                                    <th>Última atualização</th>
+                                    <th>Solicitante</th>
+                                    <th>Cpf</th>
                                     <th>Doc. Biometria</th>
                                     <th>Doc. Identidade</th>
                                     <th>Doc. Residência</th>
@@ -66,7 +67,8 @@
                                 <tr th:each="s : ${solicitacoes}">
                                     <td th:text="${s.getId()}"></td>
                                     <td th:text="${#dates.format(s.getDateCreated(), 'dd/MM/yyyy - HH:mm:ss')}"></td>
-                                    <td th:text="${#dates.format(s.getLastUpdated(), 'dd/MM/yyyy - HH:mm:ss')}"></td>
+                                    <td th:text="${s.segUsuario.nomeCompleto}"></td>
+                                    <td th:text="${s.segUsuario.cpf}"></td>
                                     <td><a th:href="@{'/solicitacao/downloadfile?id=' + ${s.getId()} + '&type=biometria'}"><i class="fa fa-download"></i></a></td>
                                     <td><a th:href="@{'/solicitacao/downloadfile?id=' + ${s.getId()} + '&type=identidade'}"><i class="fa fa-download"></i></a></td>
                                     <td><a th:href="@{'/solicitacao/downloadfile?id=' + ${s.getId()} + '&type=residencia'}"><i class="fa fa-download"></i></a></td>
