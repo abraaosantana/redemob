@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
@@ -30,11 +31,13 @@ import br.com.redemob.service.security.SolicitacaoService;
 @RequestMapping("/solicitacao")
 public class SolicitacaoController {
 
-    @Autowired
-    SolicitacaoService solicitacaoService;
+    private final SolicitacaoService solicitacaoService;
+    private final SegUsuarioService userService;
 
-    @Autowired
-    SegUsuarioService userService;
+    public SolicitacaoController(SolicitacaoService solicitacaoService, SegUsuarioService userService) {
+        this.solicitacaoService = solicitacaoService;
+        this.userService = userService;
+    }
 
     @GetMapping("/list-solicitacao")
     public ModelAndView listarSolicitacoes() {
@@ -45,16 +48,18 @@ public class SolicitacaoController {
         modelAndView.addObject("solicitacoes", solicitacaoList);
         return modelAndView;
     }
-    
+
     @GetMapping("/list-deliberacao")
-    public ModelAndView listarSolicitacoesDeliberacao() {
+    public ModelAndView listarSolicitacoesDeliberacao(String retorno) {
         ModelAndView modelAndView = new ModelAndView("security/solicitacao/list-deliberacao");
         modelAndView.addObject("segUsuario", userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName()));
         List<Solicitacao> solicitacaoList = solicitacaoService.listarSolicitacoesDeliberacao();
         modelAndView.addObject("solicitacoes", solicitacaoList);
+
+        status(retorno, modelAndView);
+
         return modelAndView;
     }
-
 
     @GetMapping("/create-solicitacao")
     public ModelAndView cadastroSolicitacao(Solicitacao solicitacao) {
@@ -66,67 +71,84 @@ public class SolicitacaoController {
 
 
     @PostMapping("/create-solicitacao")
-    public ModelAndView cadastroSolicitacao(@ModelAttribute("solicitacao") Solicitacao solicitacao, BindingResult bindingResult, 
-    		@RequestPart("biometria") MultipartFile biometria,
-    		@RequestPart("identidade") MultipartFile identidade,
-    		@RequestPart("residencia") MultipartFile residencia) {
+    public ModelAndView cadastroSolicitacao(@ModelAttribute("solicitacao") Solicitacao solicitacao, BindingResult bindingResult,
+                                            @RequestPart("biometria") MultipartFile biometria,
+                                            @RequestPart("identidade") MultipartFile identidade,
+                                            @RequestPart("residencia") MultipartFile residencia) {
         ModelAndView modelAndView = new ModelAndView("security/solicitacao/create-solicitacao");
         SegUsuario user = userService.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         modelAndView.addObject("segUsuario", user);
 
-        try{
-        	FilesDto files = FilesDto.builder()
-        			.biometria(biometria)
-        			.identidade(identidade)
-        			.residencia(residencia)
-        			.build();
+        try {
+            FilesDto files = FilesDto.builder()
+                    .biometria(biometria)
+                    .identidade(identidade)
+                    .residencia(residencia)
+                    .build();
             solicitacaoService.saveSolicitacao(solicitacao, user, files);
-        } catch (Exception e){
+        } catch (Exception e) {
             modelAndView.addObject("errorMessage", "Erro ao salvar solicitação ");
             return modelAndView;
         }
 
+        modelAndView = new ModelAndView("redirect:/security/solicitacao/list-solicitacao", "solicitacoes", solicitacaoService.listarSolicitacoes(user));
         modelAndView.addObject("successMessage", "Solicitação cadastrado(a) com sucesso!");
-        modelAndView.addObject("solicitacoes", solicitacaoService.listarSolicitacoes(user));
-        modelAndView.setViewName("security/solicitacao/list-solicitacao");
-
 
         return modelAndView;
     }
 
     @GetMapping("/downloadfile")
     public void downloadFile(@RequestParam("id") Long id, @RequestParam("type") String type, HttpServletResponse response) throws IOException {
-     Solicitacao solicitacao = solicitacaoService.findById(id);
-     response.setContentType("application/octet-stream");
-     String headerKey = "Content-Disposition";
-     String headerValue = "attachment; filename = "+ type + ".jpg";
-     response.setHeader(headerKey, headerValue);
-     ServletOutputStream outputStream = response.getOutputStream();
-     if(type.toLowerCase().equals("biometria")) {
-    	 outputStream.write(solicitacao.getDocBiometria());
-     }
-     
-     if(type.toLowerCase().equals("identidade")) {
-    	 outputStream.write(solicitacao.getDocIdentidade());
-     }
-     
-     if(type.toLowerCase().equals("residencia")) {
-    	 outputStream.write(solicitacao.getDocComprovanteResidencia());
-     }
-     
-     outputStream.close();
-     
+        Solicitacao solicitacao = solicitacaoService.findById(id);
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename = " + type + ".jpg";
+        response.setHeader(headerKey, headerValue);
+        ServletOutputStream outputStream = response.getOutputStream();
+        if (type.equalsIgnoreCase("biometria")) {
+            outputStream.write(solicitacao.getDocBiometria());
+        }
+
+        if (type.equalsIgnoreCase("identidade")) {
+            outputStream.write(solicitacao.getDocIdentidade());
+        }
+
+        if (type.equalsIgnoreCase("residencia")) {
+            outputStream.write(solicitacao.getDocComprovanteResidencia());
+        }
+
+        outputStream.close();
+
     }
-    
+
     @GetMapping("/approve/{id}")
     public ModelAndView aprovarSolicitacao(@PathVariable Long id) {
-    	solicitacaoService.aprovar(id);
-        return listarSolicitacoesDeliberacao();
+        try {
+            solicitacaoService.aprovar(id);
+            return listarSolicitacoesDeliberacao("S");
+        } catch (Exception e) {
+            return listarSolicitacoesDeliberacao("E");
+        }
     }
-    
+
     @GetMapping("/disapprove/{id}")
     public ModelAndView reprovarSolicitacao(@PathVariable Long id) {
-    	solicitacaoService.reprovar(id);
-        return listarSolicitacoesDeliberacao();
+        try {
+            solicitacaoService.reprovar(id);
+            return listarSolicitacoesDeliberacao("S");
+        } catch (Exception e) {
+            return listarSolicitacoesDeliberacao("E");
+        }
+    }
+
+    private static void status(String retorno, ModelAndView modelAndView) {
+        if (StringUtils.isNotBlank(retorno)) {
+            if (retorno.equals("S")) {
+                modelAndView.addObject("successMessage", "Sucesso!");
+            } else if (retorno.equals("E")) {
+
+                modelAndView.addObject("errorMessage", "Erro!");
+            }
+        }
     }
 }

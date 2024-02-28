@@ -2,8 +2,8 @@
 <html lang="pt"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/layout/_dashboard-blank}"
-      xmlns:data="http://www.thymeleaf.org/extras/data-attribute">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/_dashboard-blank}">
 
 <head>
     <title>Listagem de Solicitação</title>
@@ -49,7 +49,7 @@
                                 </div>
                             </div>
 
-                            <a th:href="@{/solicitacao/create-solicitacao}" class="btn btn-app">
+                            <a th:if="${segUsuario.isPermiteCriarSolicitacao()}" th:href="@{/solicitacao/create-solicitacao}" class="btn btn-app">
                                 <i class="fa fa-plus"></i> Criar Solicitação
                             </a>
 

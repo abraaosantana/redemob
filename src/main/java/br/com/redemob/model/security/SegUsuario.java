@@ -1,31 +1,16 @@
 package br.com.redemob.model.security;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedNativeQueries;
-import javax.persistence.NamedNativeQuery;
-import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
+import br.com.redemob.enums.SituacaoEnum;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.br.CPF;
@@ -39,20 +24,21 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode
-@Table(name = "SEG_USUARIO", schema = "rocket", uniqueConstraints = { @UniqueConstraint(name = "UK_SEG_USUARIO_CPF", columnNames = "cpf"),
-		                                                                 @UniqueConstraint(name = "UK_SEG_USUARIO_EMAIL", columnNames = "email") })
-@NamedNativeQueries( { @NamedNativeQuery(name = "SegUsuario.findAll", query = "SELECT u FROM SegUsuario u"),
-                       @NamedNativeQuery(name = "SegUsuario.findPorId", query = "SELECT u FROM SegUsuario u where u.id = :id"),
-		               @NamedNativeQuery(name = "SegUsuario.findPorEmail", query = "SELECT u FROM SegUsuario u where u.email = :email"),
-		               @NamedNativeQuery(name = "SegUsuario.findPorToken", query = "SELECT u FROM SegUsuario u where u.token = :token") })
+@Table(name = "SEG_USUARIO", schema = "rocket", uniqueConstraints = {@UniqueConstraint(name = "UK_SEG_USUARIO_CPF", columnNames = "cpf"),
+        @UniqueConstraint(name = "UK_SEG_USUARIO_EMAIL", columnNames = "email")})
+@NamedNativeQueries({@NamedNativeQuery(name = "SegUsuario.findAll", query = "SELECT u FROM SegUsuario u"),
+        @NamedNativeQuery(name = "SegUsuario.findPorId", query = "SELECT u FROM SegUsuario u where u.id = :id"),
+        @NamedNativeQuery(name = "SegUsuario.findPorEmail", query = "SELECT u FROM SegUsuario u where u.email = :email"),
+        @NamedNativeQuery(name = "SegUsuario.findPorToken", query = "SELECT u FROM SegUsuario u where u.token = :token")})
 public class SegUsuario implements Serializable {
 
+    @Serial
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@SequenceGenerator(name = "SEG_USUARIO_GEN", schema = "rocket", sequenceName = "SEG_USUARIO_SEQ", initialValue = 1, allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEG_USUARIO_GEN")
-	private Long id;
+    @Id
+    @SequenceGenerator(name = "SEG_USUARIO_GEN", schema = "rocket", sequenceName = "SEG_USUARIO_SEQ", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEG_USUARIO_GEN")
+    private Long id;
 
     private long version;
 
@@ -66,62 +52,72 @@ public class SegUsuario implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdated;
 
-	@CPF(message = "*Informe um CPF válido!")
-	private String cpf;
+    @CPF(message = "*Informe um CPF válido!")
+    private String cpf;
 
-	@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date dataNascimento;
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date dataNascimento;
 
-	@NotEmpty(message = "*Informe seu nome completo!")
-	@Pattern(message = "*Informe apenas letras no campo nome completo!", regexp = "^[A-Za-z áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]*$")
-	private String nomeCompleto;
+    @NotEmpty(message = "*Informe seu nome completo!")
+    @Pattern(message = "*Informe apenas letras no campo nome completo!", regexp = "^[A-Za-z áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]*$")
+    private String nomeCompleto;
 
-	@NotEmpty(message = "*Informe o nome completo da sua mãe!")
-	@Pattern(message = "*Informe apenas letras no campo Nome completo Mãe!", regexp = "^[A-Za-z áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]*$")
-	private String nomeCompletoMae;
-	
-	@NotEmpty(message = "*Informe um email!")
-	@Email(message = "*Iforme um email válido!")
-	private String email;
+    @NotEmpty(message = "*Informe o nome completo da sua mãe!")
+    @Pattern(message = "*Informe apenas letras no campo Nome completo Mãe!", regexp = "^[A-Za-z áàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]*$")
+    private String nomeCompletoMae;
 
-	@NotEmpty(message = "*Informe sua senha!")
-	private String password;
+    @NotEmpty(message = "*Informe um email!")
+    @Email(message = "*Iforme um email válido!")
+    private String email;
 
-	private String token;
+    @NotEmpty(message = "*Informe sua senha!")
+    private String password;
 
-	@Temporal(TemporalType.DATE)
-	private Date validadeToken;
+    private String token;
 
-    public SegUsuarioProfile getSegUsuarioProfile() {
-        return segUsuarioProfile;
-    }
-
-    public void setSegUsuarioProfile(SegUsuarioProfile segUsuarioProfile) {
-        this.segUsuarioProfile = segUsuarioProfile;
-    }
+    @Temporal(TemporalType.DATE)
+    private Date validadeToken;
 
     @OneToOne(mappedBy = "segUsuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
     private SegUsuarioProfile segUsuarioProfile;
-    
-	// bi-directional many-to-many association to SegGrupo
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(schema = "rocket", name = "SEG_USUARIO_GRUPO"
-                                   , joinColumns = { @JoinColumn(name = "usuario_id") }
-	                               , foreignKey = @ForeignKey(name = "FK_SEG_USUARIO_USUARIO_ID")
-	                               , inverseJoinColumns = { @JoinColumn(name = "grupo_id") }
-	                               , inverseForeignKey = @ForeignKey(name = "FK_SEG_USUARIO_GRUPO_ID"))
-	private List<SegGrupo> segGrupos;
 
-	public SegUsuario() {
-	}
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(schema = "rocket", name = "SEG_USUARIO_GRUPO"
+            , joinColumns = {@JoinColumn(name = "usuario_id")}
+            , foreignKey = @ForeignKey(name = "FK_SEG_USUARIO_USUARIO_ID")
+            , inverseJoinColumns = {@JoinColumn(name = "grupo_id")}
+            , inverseForeignKey = @ForeignKey(name = "FK_SEG_USUARIO_GRUPO_ID"))
+    private List<SegGrupo> segGrupos;
 
-	public boolean isUser() {
-		return segGrupos.stream().map(g -> g.getName()).anyMatch(u -> u.equals("USER"));
-	}
-	
-	public boolean isAdmin() {
-		return segGrupos.stream().map(g -> g.getName()).anyMatch(u -> u.equals("ADMIN"));
-	}
-	
+    @OneToMany(mappedBy = "segUsuario")
+    private List<Solicitacao> solicitacoes;
+
+    public SegUsuario() {
+    }
+
+    public boolean isPermiteCriarSolicitacao() {
+        return (!isAprovado() && !isEmAnalise() && !isExcedeuLimiteReprovacao())
+                || solicitacoes.isEmpty();
+    }
+
+    private boolean isEmAnalise() {
+        return solicitacoes.stream()
+                .map(Solicitacao::getSituacao)
+                .anyMatch(s -> s.equals(SituacaoEnum.ANALISE));
+    }
+
+    private boolean isAprovado() {
+        return solicitacoes.stream()
+                .map(Solicitacao::getSituacao)
+                .anyMatch(s -> s.equals(SituacaoEnum.APROVADO));
+    }
+
+    private boolean isExcedeuLimiteReprovacao() {
+        return solicitacoes.stream()
+                .map(Solicitacao::getSituacao)
+                .filter(s -> s.equals(SituacaoEnum.REPROVADO))
+                .count() >= 2;
+    }
+
 }
