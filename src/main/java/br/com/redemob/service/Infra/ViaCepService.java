@@ -16,13 +16,19 @@ import br.com.redemob.service.dto.AddressDto;
 
 @Service
 public class ViaCepService {
+
+	private final ViaCepClient viaCepClient;
 	
 	private static Logger logger = LoggerFactory.getLogger(ViaCepService.class);
-	
-	public String getCidade(String cep) {
+
+    public ViaCepService(ViaCepClient viaCepClient) {
+        this.viaCepClient = viaCepClient;
+    }
+
+    public String getCidade(String cep) {
 		AddressDto addressDto = null;
 		try {
-	        String response = ViaCepClient.getAddressInfo(cep);
+	        String response = viaCepClient.getAddressInfo(cep);
 	        Gson gson = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).setPrettyPrinting().create();
 	        addressDto = gson.fromJson(response, AddressDto.class);
 	    } catch (IOException | ViaCepException e) {

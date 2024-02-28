@@ -145,7 +145,7 @@
 				<ul class="sidebar-menu" data-widget="tree">
 					<li class="header">NAVEGAÇÃO PRINCIPAL</li>
 					
-					<li layout:fragment="active-treeview" class="active treeview">
+					<li sec:authorize="hasAuthority('ADMIN')" layout:fragment="active-treeview" class="active treeview">
 						<a href="#"> <i class="fa fa-dashboard"></i> <span>Dashboard</span>
 							<span class="pull-right-container"> <i
 								class="fa fa-angle-left pull-right"></i>
